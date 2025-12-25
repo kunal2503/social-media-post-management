@@ -1,10 +1,11 @@
 import React from "react";
-// import Button from "../components/ui/Button"
 import Input from "../components/ui/Input";
 import PasswordInput from "../components/ui/PasswordInput";
 import { useState } from "react";
 import { signupSchema } from "../utils/validate";
-import {Link} from "react-router"
+import {Link} from "react-router";
+import axiosInstance from "../utils/axiosInstance";
+import { useNavigate } from "react-router";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -12,22 +13,26 @@ const Signup = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
   const [error, setError] = useState({});
 
   const handleChanges = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    validateForm({ formData, setError });
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async(e) => {
     e.preventDefault();
-    try {
-      const result = signupSchema.safeParse(formData);
-      console.log(error,result)
-      if (!result.success) {
+    const result = signupSchema.safeParse(formData);
+     if (!result.success) {
         const formattedError = result.error.flatten().fieldErrors;
-        setError(formattedError);
+        return setError(formattedError);
       }
+    try {
+      const response = await axiosInstance.post("/auth/v1/signup",formData,{withCredentials : true});
+      console.log(response)
+        setError({});
+        navigate("/login");
+      
     } catch (error) {
       console.log("Error while signup time : ", error);
     }
@@ -42,11 +47,13 @@ const Signup = () => {
           className=" px-6 flex  items justify-center flex-col mt-4 gap-4"
         >
           <div className="w-full">
+            <label className="font-light text-sm cursor-pointer" htmlFor="username" >Username</label>
             <Input
               name={"username"}
               value={formData.username}
               placeholder={"Enter Username"}
               onChange={handleChanges}
+              id={"username"}
               type={"text"}
             />
             {error && (
@@ -54,11 +61,13 @@ const Signup = () => {
             )}
           </div>
           <div className="w-full">
+            <label className="font-light text-sm cursor-pointer" htmlFor="email" >Email</label>
             <Input
               name={"email"}
               value={formData.email}
               placeholder={"Enter Email Address"}
               onChange={handleChanges}
+              id={"email"}
               type={"email"}
             />
             {error && (
@@ -66,9 +75,11 @@ const Signup = () => {
             )}
           </div>
           <div className="w-full ">
+            <label className="font-light text-sm cursor-pointer" htmlFor="password" >Password</label>
             <PasswordInput
               placeholder={"Create a Password"}
               name={"password"}
+              id={"password"}
               value={formData.password}
               onChange={handleChanges}
             />

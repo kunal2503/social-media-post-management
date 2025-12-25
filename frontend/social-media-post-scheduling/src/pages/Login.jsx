@@ -3,27 +3,32 @@ import Input from "../components/ui/Input";
 import PasswordInput from "../components/ui/PasswordInput";
 import { useState } from "react";
 import { loginSchema } from "../utils/validate";
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
+import axiosInstance from "../utils/axiosInstance";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const naviagate = useNavigate();
   const [error, setError] = useState({});
 
   const handleChanges = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async(e) => {
     e.preventDefault();
-    try {
-      const result = loginSchema.safeParse(formData);
+    const result = loginSchema.safeParse(formData);
       if (!result.success) {
         const formattedError = result.error.flatten().fieldErrors;
         setError(formattedError);
       }
+    try {
+      const response = await axiosInstance.post("/auth/v1/login",formData,{withCredentials : true});
+      console.log(response);
+      naviagate("/")
     } catch (error) {
       console.log("Error while signup time : ", error);
     }
