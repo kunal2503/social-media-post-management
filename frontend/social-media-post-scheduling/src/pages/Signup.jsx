@@ -28,7 +28,7 @@ const Signup = () => {
         return setError(formattedError);
       }
     try {
-      const response = await axiosInstance.post("/auth/v1/signup",formData,{withCredentials : true});
+      const response = await axiosInstance.post("/api/auth/v1/signup",formData,{withCredentials : true});
       console.log(response)
         setError({});
         navigate("/login");

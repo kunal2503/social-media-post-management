@@ -28,7 +28,7 @@ const account =  new mongoose.Schema({
     refreshToken : {
         type : String,
     },
-    tokenExpirsAt : {
+    expiresAt : {
         type :Date,
     },
     isActive : {

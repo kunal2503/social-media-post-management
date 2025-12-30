@@ -9,7 +9,7 @@ exports.authMiddleWare = (req,res,next) =>{
 
     try{
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        req.user = decoded.userId;
+        req.user = decoded;
         console.log("Authenticated user:", decoded);
         next();
     } catch(error){
