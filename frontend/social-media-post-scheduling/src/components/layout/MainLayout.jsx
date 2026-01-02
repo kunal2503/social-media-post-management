@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Route, Routes} from "react-router-dom"
+import { Route, Routes, Navigate } from "react-router-dom"
+import { useAuth } from "../../../context/AuthContext";
 import Login from "../../pages/Login";
 import Signup from "../../pages/Signup";
 import Dashboard from "../../pages/Dashboard";
@@ -10,7 +11,13 @@ import Accounts from "../../pages/Accounts";
 import Setting from "../../pages/Setting";
 
 export const MainLayout = ()=>{
+    // const  user  = useAuth();
     const [isOpen, setIsOpen] = useState(true);
+    
+    // Redirect to login if not authenticated
+    // if (!user) {
+        // return <Navigate to="/login" replace />;
+    // }
 
     return (
         <div className="flex h-screen bg-gray-50">

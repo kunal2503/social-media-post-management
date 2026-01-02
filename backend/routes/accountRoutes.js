@@ -1,11 +1,10 @@
-const express =  require("express");
-const {redirectToOAuth, handleOAuthCallback,disconnectAccount} = require("../controllers/accountControllers");
-const {authMiddleWare} = require("../middleware/authMiddleware");
-
+const express = require("express");
 const router = express.Router();
+const authMiddleware = require("../middleware/authMiddleware");
+const {redirectToOAuth, handleOAuthCallback, getConnectedAccounts} = require("../controllers/accountControllers");
 
-router.get("/connect/:platform",redirectToOAuth);
-router.get("/auth/:platform/callback",handleOAuthCallback);
-router.get("/disconnect/:platform",authMiddleWare,disconnectAccount);
+router.get("/connect/:platform", authMiddleware, redirectToOAuth);
+router.get("/auth/:platform/callback", authMiddleware, handleOAuthCallback);
+router.get("/connected", authMiddleware, getConnectedAccounts);
 
-module.exports =  router;
+module.exports = router;

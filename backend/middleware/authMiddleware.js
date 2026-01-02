@@ -1,7 +1,6 @@
 const jwt =  require("jsonwebtoken");
 
-
-exports.authMiddleWare = (req,res,next) =>{
+const authMiddleware = (req,res,next) =>{
     const token =  req.cookies.accessToken || req.header("Authorization")?.replace("Bearer ","");
     if(!token){
         return res.status(401).json({message : "Unauthorized"});
@@ -13,6 +12,9 @@ exports.authMiddleWare = (req,res,next) =>{
         console.log("Authenticated user:", decoded);
         next();
     } catch(error){
+        console.error("Token verification error:", error.message);
         res.status(401).json({message : "Invalid token"});
     }
 }
+
+module.exports = authMiddleware;

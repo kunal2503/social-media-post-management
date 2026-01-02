@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { MainLayout } from './components/layout/MainLayout'
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
+import OAuthCallback from "./pages/OAuthCallback"
 
 const App = () => {
   
@@ -11,6 +12,7 @@ const App = () => {
         <Routes>
             <Route path="/login" element={<Login/>}/>
             <Route path="/signup" element={<Signup/>} />
+            <Route path="/auth/:platform/callback" element={<OAuthCallback/>}/>
             <Route path="/*" element={<MainLayout/>}/>
         </Routes>
     </BrowserRouter>
